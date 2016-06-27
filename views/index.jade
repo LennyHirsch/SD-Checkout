@@ -1,0 +1,53 @@
+doctype html
+html
+	head
+		title #{title}
+
+		meta(name="viewport", content="width=480, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no")
+
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+		script(type='text/javascript', src='angular.js')
+
+	body(oncontextmenu='return false', ng-app='SDcheckout', ng-controller='SDctrl')
+		div.pagecontainer(oncontextmenu='return false')
+
+			section(ng-hide="admin")
+				header
+					h1 SD Card Checkout
+					button.specialbutton(ng-click="admin = true") Admin
+				div.col-xs-3
+					div.list-group
+						a.list-group-item(href='#', ng-class="activeUser.name == user.name ? 'activeListItem' : ''", ng-click='updateActiveUser(user)', ng-repeat='user in users') {{ user.name }}
+				div.col-xs-3
+					p Taking SDs:
+					div.buttonGroup(role='group')
+						button.button(ng-click='updateCardCount(-1)') -1
+						button.button(ng-click='updateCardCount(-5)') -5
+						button.button(ng-click='updateCardCount(-10)') -10
+				div.col-xs-3.inputs
+					label Total SDs:
+					input.form-control(type="number" disabled ng-model='totalSDs')
+					label {{activeUser.name}}:
+					input.form-control(type="number" disabled ng-model='activeUser.value')
+				div.col-xs-3
+					p Return SDs:
+					div.buttonGroup(role='group')
+						button.button(ng-click='updateCardCount(1)') +1
+						button.button(ng-click='updateCardCount(5)') +5
+						button.button(ng-click='updateCardCount(10)') +10
+
+			section(ng-show="admin")
+				header
+					h1 Admin
+					button.specialbutton(ng-click="admin = false") View
+
+				div.col-xs-4
+				div.col-xs-4
+					label Set initial # of SD cards:
+					input.form-control#adminInput(type="number" ng-blur="adminSetCardCount()" ng-model='totalSDs')
+				div.col-xs-4
+					button.specialbutton(onclick='clearLocalStorage()') Clear
+					p#localStorageValue
+
+		script(type='text/javascript', src='angApp.js')
